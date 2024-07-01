@@ -1,8 +1,7 @@
 import Map from 'ol/Map';
 import View from 'ol/View';
-
 import {fromLonLat} from 'ol/proj'
-import {getEmptyLayer, getOSMLayer, getVWorldSatLayer, getTyphoonLayer, getBoundaryLayer} from "@/assets/js/makeLayers.js";
+import {getAllLayers} from "@/assets/js/makeLayers.js";
 
 function createBaseMaps(){
     let map;
@@ -12,13 +11,7 @@ function createBaseMaps(){
             zoom: 7,
         }),
         controls: [],
-        layers: [
-            getEmptyLayer(),
-            getOSMLayer(),
-            getVWorldSatLayer(),
-            getTyphoonLayer(),
-            getBoundaryLayer(),
-        ],
+        layers: getAllLayers(),
         target: 'base-map',
     });
     return map;
@@ -44,6 +37,5 @@ function toggleTyphoonLayer(map, name, state) {
         }
     })
 }
-
 
 export {createBaseMaps, showLayer, toggleTyphoonLayer}

@@ -2,12 +2,10 @@
   <div class="map-size" id="base-map"></div>
 </template>
 
-
 <script setup>
 import {onMounted, ref, watch} from "vue";
 import {createBaseMaps, showLayer, toggleTyphoonLayer} from "@/assets/js/baseMapFunctions.js";
 import Map from 'ol/Map';
-
 
 const map = ref(new Map);
 const props = defineProps({
@@ -15,7 +13,6 @@ const props = defineProps({
   typhoonBtn: Boolean,
   boundaryBtn: Boolean,
 })
-
 
 onMounted(() => {
   map.value = createBaseMaps();
@@ -32,13 +29,12 @@ watch(() => props.typhoonBtn, (newValue) => {
 watch(() => props.boundaryBtn, (newValue) => {
   toggleTyphoonLayer(map.value, "typhoon_boundary_layer", newValue);
 })
-</script>
 
+</script>
 
 <style scoped>
 .map-size{
   margin:auto;
   height: 85%;
 }
-
 </style>

@@ -74,4 +74,10 @@ function getBoundaryLayer() {
     return baseMapOverlay;
 }
 
-export {getEmptyLayer, getOSMLayer, getVWorldSatLayer, getTyphoonLayer, getBoundaryLayer}
+function getAllLayers(){
+    let layers = []
+    layers = [getEmptyLayer(), getOSMLayer(), getVWorldSatLayer(), getTyphoonLayer(), getBoundaryLayer()]
+    return layers
+}
+
+export {getAllLayers}
