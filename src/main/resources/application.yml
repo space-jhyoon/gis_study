@@ -1,0 +1,4 @@
+server:
+#  servlet:
+#    context-path: /gis_study
+  port: 8080
