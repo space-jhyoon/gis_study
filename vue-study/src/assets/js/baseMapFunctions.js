@@ -1,11 +1,8 @@
 import Map from 'ol/Map';
 import View from 'ol/View';
-import TileLayer from 'ol/layer/Tile';
-import OSM from 'ol/source/OSM';
-import {XYZ} from "ol/source";
-import {fromLonLat} from 'ol/proj'
 
-let apiKey = "ADF647B7-C03B-3445-AFE7-1FC99687F8F6";
+import {fromLonLat} from 'ol/proj'
+import {getEmptyLayer, getOSMLayer, getVWorldSatLayer, getTyphoonLayer, getBoundaryLayer} from "@/assets/js/makeLayers.js";
 
 function createBaseMaps(){
     let map;
@@ -16,57 +13,37 @@ function createBaseMaps(){
         }),
         controls: [],
         layers: [
-            getNoMap()
+            getEmptyLayer(),
+            getOSMLayer(),
+            getVWorldSatLayer(),
+            getTyphoonLayer(),
+            getBoundaryLayer(),
         ],
         target: 'base-map',
     });
-    map.addLayer(getOSMMap())
-    map.addLayer(getVSatMap())
     return map;
 }
 
-function showMapLayer(map, name){
+function showLayer(map, name){
     map.getLayers().getArray().slice().forEach((layer) => {
-        if (layer.get('name') === name) {
-            layer.setVisible(true);
-        }
-        else{
-            layer.setVisible(false);
+        if(layer.get('type') !== "typhoon_geom_layer" && layer.get('type') !== "typhoon_boundary_layer"){
+            if (layer.get('name') === name) {
+                layer.setVisible(true);
+            }
+            else if (layer.get('name') !== name){
+                layer.setVisible(false);
+            }
         }
     })
 }
 
-function getNoMap(){
-    let layer;
-    layer = new TileLayer({
-        name: "default",
-        visible: false,
-    });
-    return layer;
-}
-
-function getOSMMap(){
-    let layer;
-    layer = new TileLayer({
-        name: "osm",
-        source: new OSM(),
-        visible: false,
-    });
-    return layer;
-}
-
-function getVSatMap(){
-    let layer;
-    layer = new TileLayer({
-        name: "vsat",
-        source: new XYZ({
-            url:"http://api.vworld.kr/req/wmts/1.0.0/" + apiKey + "/Satellite/{z}/{y}/{x}.jpeg",
-            crossOrigin: 'anonymous',
-        }),
-        visible: false,
-    });
-    return layer;
+function toggleTyphoonLayer(map, name, state) {
+    map.getLayers().getArray().find((layer) => {
+        if(layer.get('type') === name) {
+            layer.setVisible(state);
+        }
+    })
 }
 
 
-export {createBaseMaps, showMapLayer}
+export {createBaseMaps, showLayer, toggleTyphoonLayer}

@@ -1,27 +1,36 @@
 <template>
-  <h2>Choose the map type</h2>
-  <input type="radio" v-model="mapType" value="nomap"> no map
-  <input type="radio" v-model="mapType" value="osm"> OSM map
-  <input type="radio" v-model="mapType" value="vsat"> v-world map
-  <br/>
-  <br/>
   <div class="map-size" id="base-map"></div>
 </template>
 
 
 <script setup>
 import {onMounted, ref, watch} from "vue";
-import {createBaseMaps, showMapLayer} from "@/assets/js/baseMapFunctions.js";
+import {createBaseMaps, showLayer, toggleTyphoonLayer} from "@/assets/js/baseMapFunctions.js";
+import Map from 'ol/Map';
+
 
 const map = ref(new Map);
-const mapType = ref("nomap");
-
-onMounted(() => {
-  map.value = createBaseMaps()
+const props = defineProps({
+  mapType: String,
+  typhoonBtn: Boolean,
+  boundaryBtn: Boolean,
 })
 
-watch(() => mapType.value, (newValue) => { // 모달창 열고 닫는 부분
-  showMapLayer(map.value, newValue)
+
+onMounted(() => {
+  map.value = createBaseMaps();
+})
+
+watch(() => props.mapType, (newValue) => {
+  showLayer(map.value, newValue);
+})
+
+watch(() => props.typhoonBtn, (newValue) => {
+  toggleTyphoonLayer(map.value, "typhoon_geom_layer", newValue);
+})
+
+watch(() => props.boundaryBtn, (newValue) => {
+  toggleTyphoonLayer(map.value, "typhoon_boundary_layer", newValue);
 })
 </script>
 
@@ -31,4 +40,5 @@ watch(() => mapType.value, (newValue) => { // 모달창 열고 닫는 부분
   margin:auto;
   height: 85%;
 }
+
 </style>
