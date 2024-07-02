@@ -1,19 +1,16 @@
 <template>
   <div>
     <button :class="[typhoonBtn === true ? 'active_btn' : 'passive_btn']" @click="clickTyphoonBtn"> typhoon layer </button>
-    <input type="checkbox" v-model="typhoonCheck" :disabled="mapType === 'nomap'"> maintain layer
-    <button :class="[boundaryBtn === true ? 'active_btn' : 'passive_btn']" @click="clickBoundaryBtn"> typhoon layer </button>
-    <input type="checkbox" v-model="boundaryCheck" :disabled="mapType === 'nomap'"> maintain layer
+    <input type="checkbox" v-model="typhoonCheck" :disabled="mapType === 'nomap'"> maintain
+    <button :class="[boundaryBtn === true ? 'active_btn' : 'passive_btn']" @click="clickBoundaryBtn"> boundary layer </button>
+    <input type="checkbox" v-model="boundaryCheck" :disabled="mapType === 'nomap'"> maintain
   </div>
-  <alert-component ref="alertCompoRef" :message="message"/>
 </template>
-
 
 <script setup>
 import {ref, watch} from "vue";
 import {axiosTest} from "@/assets/js/axiosFunctions.js";
-import {showAlert} from "@/assets/js/showAlertFunction.js";
-import AlertComponent from "@/components/modal/AlertComponent.vue";
+import {clickBtnAndCheck, settingBtnAndCheck} from "@/assets/js/settingBtnAndCheck.js";
 
 const props = defineProps({
   mapType: String,
@@ -25,38 +22,38 @@ const boundaryBtn = ref(false);
 const typhoonCheck = ref(false);
 const boundaryCheck = ref(false);
 
-const alertCompoRef = ref(null);
-const message = ref("배경지도를 먼저 선택해 주십시오");
-
 const emit = defineEmits([
-  'getTyphoonBtnIsTrue', 'getBoundaryBtnIsTrue'
+  'getTyphoonBtnIsTrue', 'getBoundaryBtnIsTrue', 'showAlert'
 ]);
 
 function clickTyphoonBtn(){
-  if(showAlert(props.mapType, alertCompoRef.value) !== true){
-    typhoonBtn.value = !typhoonBtn.value;
+  if(props.mapType === "nomap"){
+    emit('showAlert');
+  }
+  else{
+    let setting = clickBtnAndCheck(props.mapType, typhoonBtn.value, typhoonCheck.value)
+    typhoonBtn.value = setting.btn
+    typhoonCheck.value = setting.check
   }
 }
 
 function clickBoundaryBtn(){
-  if(showAlert(props.mapType, alertCompoRef.value) !== true){
-    boundaryBtn.value = !boundaryBtn.value;
+  if(props.mapType === "nomap"){
+    emit('showAlert');
+  }
+  else{
+    let setting = clickBtnAndCheck(props.mapType, boundaryBtn.value, boundaryCheck.value)
+    boundaryBtn.value = setting.btn
+    boundaryCheck.value = setting.check
   }
 }
 
 watch(() => props.mapType, () => {
-  if(typhoonCheck.value === false){
-    typhoonBtn.value = false;
-  }
-  if(boundaryCheck.value === false){
-    boundaryBtn.value = false;
-  }
-  if(props.mapType === "nomap"){
-    typhoonBtn.value = false;
-    boundaryBtn.value = false;
-    typhoonCheck.value = false;
-    boundaryCheck.value = false;
-  }
+  let setting = settingBtnAndCheck(props.mapType, typhoonBtn.value, boundaryBtn.value, typhoonCheck.value, boundaryCheck.value)
+  typhoonBtn.value = setting.btn1;
+  boundaryBtn.value = setting.btn2;
+  typhoonCheck.value = setting.check1;
+  boundaryCheck.value = setting.check2;
   axiosTest();
 })
 

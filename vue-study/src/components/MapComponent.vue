@@ -12,6 +12,8 @@ const props = defineProps({
   mapType: String,
   typhoonBtn: Boolean,
   boundaryBtn: Boolean,
+  wildfireBtn: Boolean,
+  floodingBtn: Boolean,
 })
 
 onMounted(() => {
