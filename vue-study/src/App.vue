@@ -22,7 +22,7 @@
 import {ref} from "vue";
 import MapComponent from './components/MapComponent.vue'
 import TyphoonComponent from "@/components/TyphoonComponent.vue";
-import ServiceComponent from "@/components/ServiceComponent.vue";
+import ServiceComponent from "@/components/DisasterComponent.vue";
 import AlertComponent from "@/components/modal/AlertComponent.vue";
 
 const mapType = ref("nomap");

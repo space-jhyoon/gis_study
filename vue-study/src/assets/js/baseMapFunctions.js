@@ -2,6 +2,7 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import {fromLonLat} from 'ol/proj'
 import {getAllLayers} from "@/assets/js/makeLayers.js";
+import {boundaryInfo, floodingInfo, typhoonInfo, wildfireInfo} from "@/assets/js/layerInfoconfig.js";
 
 function createBaseMaps(){
     let map;
@@ -19,7 +20,8 @@ function createBaseMaps(){
 
 function showLayer(map, name){
     map.getLayers().getArray().slice().forEach((layer) => {
-        if(layer.get('type') !== "typhoon_geom_layer" && layer.get('type') !== "typhoon_boundary_layer"){
+        if(layer.get('type') !== typhoonInfo.type && layer.get('type') !== boundaryInfo.type &&
+            layer.get('type') !== wildfireInfo.type && layer.get('type') !== floodingInfo.type){
             if (layer.get('name') === name) {
                 layer.setVisible(true);
             }
@@ -30,7 +32,7 @@ function showLayer(map, name){
     })
 }
 
-function toggleTyphoonLayer(map, name, state) {
+function toggleLayer(map, name, state){
     map.getLayers().getArray().find((layer) => {
         if(layer.get('type') === name) {
             layer.setVisible(state);
@@ -38,4 +40,4 @@ function toggleTyphoonLayer(map, name, state) {
     })
 }
 
-export {createBaseMaps, showLayer, toggleTyphoonLayer}
+export {createBaseMaps, showLayer, toggleLayer}

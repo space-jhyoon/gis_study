@@ -9,7 +9,7 @@
 
 <script setup>
 import {ref, watch} from "vue";
-import {axiosTest} from "@/assets/js/axiosFunctions.js";
+// import {axiosTest} from "@/assets/js/axiosFunctions.js";
 import {clickBtnAndCheck, settingBtnAndCheck} from "@/assets/js/settingBtnAndCheck.js";
 
 const props = defineProps({
@@ -54,7 +54,7 @@ watch(() => props.mapType, () => {
   boundaryBtn.value = setting.btn2;
   typhoonCheck.value = setting.check1;
   boundaryCheck.value = setting.check2;
-  axiosTest();
+  // axiosTest();
 })
 
 watch(() => typhoonCheck.value, (newValue) => {

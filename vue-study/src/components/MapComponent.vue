@@ -4,10 +4,12 @@
 
 <script setup>
 import {onMounted, ref, watch} from "vue";
-import {createBaseMaps, showLayer, toggleTyphoonLayer} from "@/assets/js/baseMapFunctions.js";
+import {createBaseMaps, showLayer, toggleLayer} from "@/assets/js/baseMapFunctions.js";
 import Map from 'ol/Map';
+import {boundaryInfo, floodingInfo, typhoonInfo, wildfireInfo} from "@/assets/js/layerInfoconfig.js";
 
 const map = ref(new Map);
+const loading = ref(true);
 const props = defineProps({
   mapType: String,
   typhoonBtn: Boolean,
@@ -22,14 +24,23 @@ onMounted(() => {
 
 watch(() => props.mapType, (newValue) => {
   showLayer(map.value, newValue);
+  loading.value = false;
 })
 
 watch(() => props.typhoonBtn, (newValue) => {
-  toggleTyphoonLayer(map.value, "typhoon_geom_layer", newValue);
+  toggleLayer(map.value, typhoonInfo.type, newValue);
 })
 
 watch(() => props.boundaryBtn, (newValue) => {
-  toggleTyphoonLayer(map.value, "typhoon_boundary_layer", newValue);
+  toggleLayer(map.value, boundaryInfo.type, newValue);
+})
+
+watch(() => props.wildfireBtn, (newValue) => {
+  toggleLayer(map.value, wildfireInfo.type, newValue);
+})
+
+watch(() => props.floodingBtn, (newValue) => {
+  toggleLayer(map.value, floodingInfo.type, newValue);
 })
 
 </script>
@@ -37,6 +48,6 @@ watch(() => props.boundaryBtn, (newValue) => {
 <style scoped>
 .map-size{
   margin:auto;
-  height: 85%;
+  height: 80%;
 }
 </style>

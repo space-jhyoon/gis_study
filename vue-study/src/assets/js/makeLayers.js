@@ -2,9 +2,7 @@ import ImageLayer from "ol/layer/Image";
 import {ImageWMS, XYZ} from "ol/source";
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
-
-let apiKey = "ADF647B7-C03B-3445-AFE7-1FC99687F8F6";
-let geoserverURL = "http://dev.spaceware.kr/geoserver/etri_sat/wms";
+import {key, url, typhoonInfo, boundaryInfo, wildfireInfo, floodingInfo} from "@/assets/js/layerInfoconfig.js";
 
 function getEmptyLayer(){
     let layer;
@@ -21,62 +19,68 @@ function getOSMLayer(){
         name: "osm",
         source: new OSM(),
         visible: false,
+        zIndex: 10,
     });
-    layer.setZIndex(10);
     return layer;
 }
 
-function getVWorldSatLayer(){
+function getVWorldSatLayer(url){
     let layer;
     layer = new TileLayer({
         name: "vsat",
         source: new XYZ({
-            url:"http://api.vworld.kr/req/wmts/1.0.0/" + apiKey + "/Satellite/{z}/{y}/{x}.jpeg",
+            url: url,
             crossOrigin: 'anonymous',
         }),
         visible: false,
+        zIndex: 10,
     });
-    layer.setZIndex(10);
     return layer;
 }
 
-function getTyphoonLayer() {
-    let typhoonLayer = new ImageLayer({
+function getTyphoonLayer(info) {
+    let layer;
+    layer = new ImageLayer({
         source: new ImageWMS({
-            url: geoserverURL,
+            url: info.url,
             params: {
-                'LAYERS': "etri_sat:typhoon_polygon",
-                'VIEWPARAMS': `typ_num:2306;agency:"RKSL";`
+                'LAYERS': info.LAYERS,
+                'VIEWPARAMS': info.VIEWPARAMS,
+                'STYLES' : info.STYLES
             },
             crossOrigin: 'anonymous',
         }),
         visible: false,
-        type: "typhoon_geom_layer"
+        zIndex: info.zIndex,
+        type: info.type
     })
-    typhoonLayer.setZIndex(20);
-    return typhoonLayer
+    return layer
 }
 
-function getBoundaryLayer() {
-    let baseMapOverlay = new ImageLayer({
+function getDisasterLayer(info){
+    let wildfireLayer;
+    wildfireLayer = new ImageLayer({
         source: new ImageWMS({
-            url: "http://dev.spaceware.kr/geoserver/etri_4d/wms",
+            url: info.url,
             params: {
-                'LAYERS': "etri_4d:SHP_WCDTL",
-                'STYLES' : "etri_4d_world_overlay"
+                'apikey': info.key,
+                'LAYERS' : info.LAYERS,
+                'STYLES' : info.STYLES,
             },
             crossOrigin: 'anonymous',
         }),
         visible: false,
-        type:"typhoon_boundary_layer",
+        zIndex: info.zIndex,
+        type: info.type,
     })
-    baseMapOverlay.setZIndex(15);
-    return baseMapOverlay;
+    return wildfireLayer;
 }
 
 function getAllLayers(){
     let layers = []
-    layers = [getEmptyLayer(), getOSMLayer(), getVWorldSatLayer(), getTyphoonLayer(), getBoundaryLayer()]
+    layers = [getEmptyLayer(), getOSMLayer(), getVWorldSatLayer(url.vWorldSat),
+                getTyphoonLayer(typhoonInfo), getTyphoonLayer(boundaryInfo),
+                getDisasterLayer(wildfireInfo), getDisasterLayer(floodingInfo),]
     return layers
 }
 

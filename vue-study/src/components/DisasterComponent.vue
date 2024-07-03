@@ -1,9 +1,9 @@
 <template>
   <div>
     <button :class="[wildfireBtn === true ? 'active_btn' : 'passive_btn']" @click="clickWildfireBtn"> wildfire layer </button>
-    <input type="checkbox" v-model="wildfireCheck" :disabled="mapType === 'nomap'"> maintain layer
+    <input type="checkbox" v-model="wildfireCheck" :disabled="mapType === 'nomap'"> maintain
     <button :class="[floodingBtn === true ? 'active_btn' : 'passive_btn']" @click="clickFloodingBtn"> flooding layer </button>
-    <input type="checkbox" v-model="floodingCheck" :disabled="mapType === 'nomap'"> maintain layer
+    <input type="checkbox" v-model="floodingCheck" :disabled="mapType === 'nomap'"> maintain
   </div>
 </template>
 
