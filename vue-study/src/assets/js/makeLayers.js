@@ -2,12 +2,13 @@ import ImageLayer from "ol/layer/Image";
 import {ImageWMS, XYZ} from "ol/source";
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
-import {key, url, typhoonInfo, boundaryInfo, wildfireInfo, floodingInfo} from "@/assets/js/layerInfoconfig.js";
+import {url, typhoonInfo, boundaryInfo, wildfireInfo, floodingInfo} from "@/assets/js/layerInfoconfig.js";
+import {noMap, OSMMap, vSatMap} from "@/assets/js/nameConfig.js";
 
 function getEmptyLayer(){
     let layer;
     layer = new TileLayer({
-        name: "default",
+        name: noMap,
         visible: false,
     });
     return layer;
@@ -16,7 +17,7 @@ function getEmptyLayer(){
 function getOSMLayer(){
     let layer;
     layer = new TileLayer({
-        name: "osm",
+        name: OSMMap,
         source: new OSM(),
         visible: false,
         zIndex: 10,
@@ -27,7 +28,7 @@ function getOSMLayer(){
 function getVWorldSatLayer(url){
     let layer;
     layer = new TileLayer({
-        name: "vsat",
+        name: vSatMap,
         source: new XYZ({
             url: url,
             crossOrigin: 'anonymous',
@@ -58,8 +59,8 @@ function getTyphoonLayer(info) {
 }
 
 function getDisasterLayer(info){
-    let wildfireLayer;
-    wildfireLayer = new ImageLayer({
+    let layer;
+    layer = new ImageLayer({
         source: new ImageWMS({
             url: info.url,
             params: {
@@ -73,14 +74,14 @@ function getDisasterLayer(info){
         zIndex: info.zIndex,
         type: info.type,
     })
-    return wildfireLayer;
+    return layer;
 }
 
 function getAllLayers(){
     let layers = []
     layers = [getEmptyLayer(), getOSMLayer(), getVWorldSatLayer(url.vWorldSat),
                 getTyphoonLayer(typhoonInfo), getTyphoonLayer(boundaryInfo),
-                getDisasterLayer(wildfireInfo), getDisasterLayer(floodingInfo),]
+                getDisasterLayer(wildfireInfo), getDisasterLayer(floodingInfo)]
     return layers
 }
 

@@ -1,4 +1,6 @@
-function settingBtnAndCheck(mapType, btn1, btn2, check1, check2){
+import {noMap} from "@/assets/js/nameConfig.js";
+
+function getControlSettings(mapType, btn1, btn2, check1, check2){ // 맵 바뀔 때 컨트롤 세팅 가져옴
     let setting = {}
 
     if(check1 === false){
@@ -7,7 +9,7 @@ function settingBtnAndCheck(mapType, btn1, btn2, check1, check2){
     if(check2 === false){
         btn2 = false;
     }
-    if(mapType === "nomap"){
+    if(mapType === noMap){
         btn1 = false;
         btn2 = false;
         check1 = false;
@@ -21,17 +23,25 @@ function settingBtnAndCheck(mapType, btn1, btn2, check1, check2){
     return setting
 }
 
-function clickBtnAndCheck(mapType, btn, check){
+function updateControlSettings(controlType, btn, check){ // 버튼, 체크박스 클릭으로 인한 업데이트
     let setting = {}
-    btn = !btn;
-
-    if(btn === false){
-        check = false;
+    switch (controlType){
+        case "btn":
+            btn = !btn;
+            if(btn === false){
+                check = false;
+            }
+            break;
+        case "check":
+            check = !check;
+            if(check === true) {
+                btn = true;
+            }
     }
-
     setting.btn = btn
     setting.check = check
     return setting
 }
 
-export {settingBtnAndCheck, clickBtnAndCheck}
+
+export {getControlSettings, updateControlSettings}

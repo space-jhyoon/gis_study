@@ -1,16 +1,21 @@
 <template>
-  <div>
-    <button :class="[wildfireBtn === true ? 'active_btn' : 'passive_btn']" @click="clickWildfireBtn"> wildfire layer </button>
-    <input type="checkbox" v-model="wildfireCheck" :disabled="mapType === 'nomap'"> maintain
-    <button :class="[floodingBtn === true ? 'active_btn' : 'passive_btn']" @click="clickFloodingBtn"> flooding layer </button>
-    <input type="checkbox" v-model="floodingCheck" :disabled="mapType === 'nomap'"> maintain
-  </div>
+  <li>
+    <label class="title">Disaster </label>
+    <button :class="[wildfireBtn === true ? 'active_btn' : 'passive_btn']"
+            @click="clickControls('btn', wildfire, wildfireBtn, wildfireCheck)"> {{ wildfire }} </button>
+    <input type="checkbox" v-model="wildfireCheck" :disabled="mapType === noMap"
+           @click="clickControls('check', wildfire, wildfireBtn, wildfireCheck)"> maintain
+    <button :class="[floodingBtn === true ? 'active_btn' : 'passive_btn']"
+            @click="clickControls('btn', flooding, floodingBtn, floodingCheck)"> {{ flooding }} </button>
+    <input type="checkbox" v-model="floodingCheck" :disabled="mapType === noMap"
+           @click="clickControls('check', flooding, floodingBtn, floodingCheck)"> maintain
+  </li>
 </template>
-
 
 <script setup>
 import {ref, watch} from "vue";
-import {clickBtnAndCheck, settingBtnAndCheck} from "@/assets/js/settingBtnAndCheck.js";
+import {updateControlSettings, getControlSettings} from "@/assets/js/settingBtnAndCheck.js";
+import {wildfire, flooding, noMap} from "../assets/js/nameConfig.js";
 
 const props = defineProps({
   mapType: String,
@@ -23,57 +28,38 @@ const wildfireCheck = ref(false);
 const floodingCheck = ref(false);
 
 const emit = defineEmits([
-  'getWildfireBtnIsTrue', 'getFloodingBtnIsTrue', 'showAlert'
+  'isWildfireBtnTrue', 'isFloodingBtnTrue', 'showAlert'
 ]);
 
-function clickWildfireBtn(){
-  if(props.mapType === "nomap"){
+function clickControls(controlType, type, btn, check){
+  if(props.mapType === noMap){
     emit('showAlert');
+    return
   }
-  else{
-    let setting = clickBtnAndCheck(props.mapType, wildfireBtn.value, wildfireCheck.value)
-    wildfireBtn.value = setting.btn
-    wildfireCheck.value = setting.check
-  }
-}
-
-function clickFloodingBtn(){
-  if(props.mapType === "nomap"){
-    emit('showAlert');
-  }
-  else{
-    let setting = clickBtnAndCheck(props.mapType, floodingBtn.value, floodingCheck.value)
-    floodingBtn.value = setting.btn
-    floodingCheck.value = setting.check
+  let setting = updateControlSettings(controlType, btn, check)
+  switch (type){
+    case wildfire:
+      wildfireBtn.value = setting.btn
+      wildfireCheck.value = setting.check
+      break;
+    case flooding:
+      floodingBtn.value = setting.btn
+      floodingCheck.value = setting.check
+      break;
   }
 }
 
 watch(() => props.mapType, () => {
-  let setting = settingBtnAndCheck(props.mapType, wildfireBtn.value, floodingBtn.value, wildfireCheck.value, floodingCheck.value)
+  let setting = getControlSettings(props.mapType, wildfireBtn.value, floodingBtn.value, wildfireCheck.value, floodingCheck.value)
   wildfireBtn.value = setting.btn1;
   floodingBtn.value = setting.btn2;
   wildfireCheck.value = setting.check1;
   floodingCheck.value = setting.check2;
 })
 
-watch(() => wildfireCheck.value, (newValue) => {
-  if(newValue === true){
-    wildfireBtn.value = true;
-  }
-})
-
-watch(() => floodingCheck.value, (newValue) => {
-  if(newValue === true){
-    floodingBtn.value = true;
-  }
-})
-
-watch(() => wildfireBtn.value, () => {
-  emit('getWildfireBtnIsTrue', wildfireBtn.value)
-})
-
-watch(() => floodingBtn.value, () => {
-  emit('getFloodingBtnIsTrue', floodingBtn.value)
+watch(() => [wildfireBtn.value, floodingBtn.value], ([newW, newF], [oldW, oldF]) => {
+  (newW !== oldW) && emit('isWildfireBtnTrue', wildfire, wildfireBtn.value);
+  (newF !== oldF) && emit('isFloodingBtnTrue', flooding, floodingBtn.value);
 })
 
 </script>
@@ -96,5 +82,12 @@ watch(() => floodingBtn.value, () => {
 }
 [type="checkbox"] {
   accent-color: #ffe0e6;
+}
+li{
+  list-style:none;
+}
+.title{
+  font-size: 15px;
+  font-weight: bold;
 }
 </style>

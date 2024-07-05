@@ -3,6 +3,7 @@ import View from 'ol/View';
 import {fromLonLat} from 'ol/proj'
 import {getAllLayers} from "@/assets/js/makeLayers.js";
 import {boundaryInfo, floodingInfo, typhoonInfo, wildfireInfo} from "@/assets/js/layerInfoconfig.js";
+import {baseMap, boundary, flooding, line, point, typhoon, wildfire} from "@/assets/js/nameConfig.js";
 
 function createBaseMaps(){
     let map;
@@ -13,15 +14,15 @@ function createBaseMaps(){
         }),
         controls: [],
         layers: getAllLayers(),
-        target: 'base-map',
+        target: baseMap,
     });
     return map;
 }
 
 function showLayer(map, name){
     map.getLayers().getArray().slice().forEach((layer) => {
-        if(layer.get('type') !== typhoonInfo.type && layer.get('type') !== boundaryInfo.type &&
-            layer.get('type') !== wildfireInfo.type && layer.get('type') !== floodingInfo.type){
+        if(layer.get('type') !== typhoon && layer.get('type') !== boundary && layer.get('type') !== wildfire &&
+            layer.get('type') !== flooding && layer.get('type') !== point && layer.get('type') !== line){
             if (layer.get('name') === name) {
                 layer.setVisible(true);
             }

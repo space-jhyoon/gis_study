@@ -6,16 +6,12 @@
 import {onMounted, ref, watch} from "vue";
 import {createBaseMaps, showLayer, toggleLayer} from "@/assets/js/baseMapFunctions.js";
 import Map from 'ol/Map';
-import {boundaryInfo, floodingInfo, typhoonInfo, wildfireInfo} from "@/assets/js/layerInfoconfig.js";
+import {typhoon, boundary, wildfire, flooding, point, line} from "@/assets/js/nameConfig.js";
 
 const map = ref(new Map);
-const loading = ref(true);
 const props = defineProps({
   mapType: String,
-  typhoonBtn: Boolean,
-  boundaryBtn: Boolean,
-  wildfireBtn: Boolean,
-  floodingBtn: Boolean,
+  buttons: Object,
 })
 
 onMounted(() => {
@@ -24,25 +20,17 @@ onMounted(() => {
 
 watch(() => props.mapType, (newValue) => {
   showLayer(map.value, newValue);
-  loading.value = false;
 })
 
-watch(() => props.typhoonBtn, (newValue) => {
-  toggleLayer(map.value, typhoonInfo.type, newValue);
+watch(() => [props.buttons.typhoon, props.buttons.boundary, props.buttons.wildfire, props.buttons.flooding, props.buttons.point, props.buttons.line],
+    ([n1, n2, n3, n4, n5, n6], [o1, o2, o3, o4, o5, o6]) => {
+  (n1 !== o1) && toggleLayer(map.value, typhoon, n1);
+  (n2 !== o2) && toggleLayer(map.value, boundary, n2);
+  (n3 !== o3) && toggleLayer(map.value, wildfire, n3);
+  (n4 !== o4) && toggleLayer(map.value, flooding, n4);
+  (n5 !== o5) && toggleLayer(map.value, point, n5);
+  (n6 !== o6) && toggleLayer(map.value, line, n6);
 })
-
-watch(() => props.boundaryBtn, (newValue) => {
-  toggleLayer(map.value, boundaryInfo.type, newValue);
-})
-
-watch(() => props.wildfireBtn, (newValue) => {
-  toggleLayer(map.value, wildfireInfo.type, newValue);
-})
-
-watch(() => props.floodingBtn, (newValue) => {
-  toggleLayer(map.value, floodingInfo.type, newValue);
-})
-
 </script>
 
 <style scoped>
