@@ -15,7 +15,7 @@
 <script setup>
 import {ref, watch} from "vue";
 import {updateControlSettings, getControlSettings} from "@/assets/js/settingBtnAndCheck.js";
-import {wildfire, flooding, noMap} from "../assets/js/nameConfig.js";
+import {wildfire, flooding, noMap} from "../../../assets/js/nameConfig.js";
 
 const props = defineProps({
   mapType: String,

@@ -15,7 +15,7 @@
 <script setup>
 import {ref, watch} from "vue";
 import {getControlSettings, updateControlSettings} from "@/assets/js/settingBtnAndCheck.js";
-import {point, line, noMap} from "../assets/js/nameConfig.js";
+import {point, line, noMap} from "../../../assets/js/nameConfig.js";
 
 const props = defineProps({
   mapType: String,

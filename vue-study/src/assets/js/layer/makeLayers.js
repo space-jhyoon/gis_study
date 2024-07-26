@@ -2,7 +2,7 @@ import ImageLayer from "ol/layer/Image";
 import {ImageWMS, XYZ} from "ol/source";
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
-import {url, typhoonInfo, boundaryInfo, wildfireInfo, floodingInfo} from "@/assets/js/layerInfoconfig.js";
+import {url, typhoonInfo, boundaryInfo, wildfireInfo, floodingInfo} from "@/assets/js/layer/layerInfoconfig.js";
 import {noMap, OSMMap, vSatMap} from "@/assets/js/nameConfig.js";
 
 function getEmptyLayer(){
@@ -59,6 +59,25 @@ function getTyphoonLayer(info) {
 }
 
 function getDisasterLayer(info){
+    let layer;
+    layer = new ImageLayer({
+        source: new ImageWMS({
+            url: info.url,
+            params: {
+                'apikey': info.key,
+                'LAYERS' : info.LAYERS,
+                'STYLES' : info.STYLES,
+            },
+            crossOrigin: 'anonymous',
+        }),
+        visible: false,
+        zIndex: info.zIndex,
+        type: info.type,
+    })
+    return layer;
+}
+
+function getTashuLayer(info){
     let layer;
     layer = new ImageLayer({
         source: new ImageWMS({

@@ -59,7 +59,7 @@ watch(() => props.mapType, () => {
 
 watch(() => [typhoonBtn.value, boundaryBtn.value], ([newT, newB], [oldT, oldB]) => {
   (newT !== oldT) && emit('isTyphoonBtnTrue', typhoon, typhoonBtn.value);
-  (newB !== oldB) &&  emit('isBoundaryBtnTrue', boundary, boundaryBtn.value);
+  (newB !== oldB) && emit('isBoundaryBtnTrue', boundary, boundaryBtn.value);
 })
 </script>
 

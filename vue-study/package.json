@@ -12,10 +12,12 @@
     "axios": "^1.7.2",
     "ol": "^7.4.0",
     "ol-ext": "^4.0.18",
-    "vue": "^3.4.21"
+    "vue": "^3.4.21",
+    "vue-router": "^4.4.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
+    "@vue/cli-plugin-typescript": "~5.0.0",
     "vite": "^5.2.0"
   }
 }

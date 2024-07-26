@@ -4,18 +4,29 @@
 
 <script setup>
 import {onMounted, ref, watch} from "vue";
-import {createBaseMaps, showLayer, toggleLayer} from "@/assets/js/baseMapFunctions.js";
+import {createAllLayers, showLayer, toggleLayer} from "@/assets/js/layer/baseMapFunctions.js";
 import Map from 'ol/Map';
-import {typhoon, boundary, wildfire, flooding, point, line} from "@/assets/js/nameConfig.js";
+import {typhoon, boundary, wildfire, flooding, point, line, hhi, noMap} from "@/assets/js/nameConfig.js";
 
 const map = ref(new Map);
 const props = defineProps({
+  mode : String,
   mapType: String,
   buttons: Object,
 })
+// const emit = defineEmits([
+//   'sendMap'
+// ]);
 
 onMounted(() => {
-  map.value = createBaseMaps();
+  map.value = createAllLayers();
+  // emit("sendMap", map.value)
+})
+
+watch(() => props.mode, (newValue) => {
+  if(newValue === hhi){
+    showLayer(map.value, noMap);
+  }
 })
 
 watch(() => props.mapType, (newValue) => {
