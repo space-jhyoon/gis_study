@@ -6,16 +6,4 @@ import vue from '@vitejs/plugin-vue';
 export default defineConfig({
   plugins: [vue()],
   base: '/gis_study/',
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
-  },
-  server: {
-    proxy: {
-      // "/gis_study/test": 'http://localhost:8080',
-      "/test": 'http://localhost:8080',
-    }
-  },
-  // base: '/gis_study'
 })
